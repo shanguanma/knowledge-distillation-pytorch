@@ -124,7 +124,8 @@ def train_evaluate(model):
     for data, target in train_loader:
         if args.cuda:
             data, target = data.cuda(), target.cuda()
-        data, target = Variable(data, volatile=True), Variable(target)
+            # https://stackoverflow.com/questions/49837638/what-is-volatile-variable-in-pytorch
+        data, target = Variable(data, volatile=True), Variable(target) 
         output = model(data)
         train_loss += F.cross_entropy(output, target).data[0] # sum up batch loss
         pred = output.data.max(1, keepdim=True)[1]
